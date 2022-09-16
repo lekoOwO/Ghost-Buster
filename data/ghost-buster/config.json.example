@@ -1,0 +1,15 @@
+{
+    "db": "redis://redis:6379/0",
+    "inactivityTime": 5184000000,
+    "firstMetExpireTime": 1209600000,
+    "cronInterval": 86400000,
+    "firstRunDeadline": 0,
+
+    "botToken": "YOUR_BOT_TOKEN",
+    "logWebhook": "YOUR_LOG_WEBHOOK",
+    "serverId": "YOUR_SERVER_ID",
+    "logChannelId": "YOUR_LOG_CHANNEL_ID",
+
+    "VIPRoleIds": [],
+    "activeRoleId": "YOUR_ACTIVE_ROLE_ID"
+}

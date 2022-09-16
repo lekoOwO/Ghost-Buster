@@ -1,0 +1,23 @@
+{
+  "name": "ghost-buster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.mjs",
+  "scripts": {
+    "start": "node src/index.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lekoOwO/Ghost-Buster.git"
+  },
+  "author": "Leko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lekoOwO/Ghost-Buster/issues"
+  },
+  "homepage": "https://github.com/lekoOwO/Ghost-Buster#readme",
+  "dependencies": {
+    "discord.js": "^14.3.0",
+    "redis": "^4.3.1"
+  }
+}

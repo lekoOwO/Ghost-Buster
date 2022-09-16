@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:alpine
+    restart: always
+    command: redis-server --save 60 1 --loglevel warning
+    volumes: 
+      - ./data/redis:/data
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./data/ghost-buster:/app/data
