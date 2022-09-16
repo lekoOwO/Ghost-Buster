@@ -1,10 +1,14 @@
 import Discord from "discord.js";
+import { config } from "./env.mjs";
 
-const client = new Discord.Client({ fetchAllMembers: true });
+const client = new Discord.Client({ 
+    fetchAllMembers: true,
+    intents: [Discord.GatewayIntentBits.Guilds, Discord.GatewayIntentBits.GuildPresences, Discord.GatewayIntentBits.GuildMembers, Discord.GatewayIntentBits.GuildMessages, Discord.GatewayIntentBits.GuildMessageReactions]
+});
 
 async function sendTaskCompleteLog(logs){
     const body = {
-        "content": `Task completed.\n\nTime: \`${new Date().toISOString()}\``,
+        "content": `Task completed.\n\Time: \`${new Date().toISOString()}\`\n\n`,
         "embeds": [
           {
             "title": "Kicked",
@@ -29,7 +33,7 @@ async function sendTaskCompleteLog(logs){
 
 async function sendErrorLog(error){
     const body = {
-        "content": `Task failed.\n\nTime: \`${new Date().toISOString()}\``,
+        "content": `Task failed.\nTime: \`${new Date().toISOString()}\`\n\n`,
         "embeds": [
           {
             "title": "Error",

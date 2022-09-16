@@ -1,6 +1,6 @@
 import { config } from './env.mjs';
 import { client, sendTaskCompleteLog, sendErrorLog } from "./discord.mjs"
-import { addActive, getMembers, deleteActiveMember } from './db.mjs';
+import { addActive, getMembers, deleteActiveMember, addFirstMet, deleteFirstMet } from './db.mjs';
 
 // ===== Functions ===== //
 
@@ -30,11 +30,13 @@ client.on("messageReactionRemove", messageReactionHandler);
 client.on("userUpdate", (_, newUser) => {
     if (newUser.bot) return;
     addActive(newUser.id);
-})
+});
+
+await client.login(config.botToken);
 
 // ===== Crons ===== //
 
-(async() => {
+await (async() => {
     while(true) {
         try {
             const now = Date.now();
@@ -42,10 +44,11 @@ client.on("userUpdate", (_, newUser) => {
 
             const dbMembers = await getMembers();
 
-            const guild = await client.guilds.fetch(config.serverId);
+            const guild = await client.guilds.fetch({guild: config.serverId});
             const members = await guild.members.fetch();
+            const activeRole = await guild.roles.fetch(config.activeRoleId);
 
-            console.log("Members: ", members);
+            console.log("Members: ", members.map(x => ({id: x.user.id, username: x.user.username})));
 
             const logs = {
                 setInactive: [],
@@ -61,7 +64,7 @@ client.on("userUpdate", (_, newUser) => {
                 if (member.roles.cache.some(role => config.VIPRoleIds.includes(role.id))) continue; // Don't kick VIPs.
 
                 if (dbMembers.inactive.includes(id)) {
-                    await member.roles.remove(config.activeRoleId);
+                    await member.roles.remove(activeRole);
                     await deleteActiveMember(id);
                     await addFirstMet(id);
 
@@ -78,9 +81,9 @@ client.on("userUpdate", (_, newUser) => {
                 }
 
                 // Not in DB yet.
-                if (now < firstRunDeadline) continue;
+                if (now < config.firstRunDeadline) continue;
 
-                await member.roles.remove(config.activeRoleId);
+                await member.roles.remove(activeRole);
                 await deleteActiveMember(id);
                 await addFirstMet(id);
 
@@ -96,6 +99,4 @@ client.on("userUpdate", (_, newUser) => {
 
         await sleep(config.cronInterval);
     }
-})()
-
-client.login(config.botToken);
+})();
